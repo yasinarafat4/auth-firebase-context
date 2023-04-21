@@ -1,7 +1,19 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link, NavLink } from "react-router-dom";
+import { AuthContext } from "../provider/AuthProvider";
+import { ArrowRightOnRectangleIcon } from "@heroicons/react/24/solid";
 
 const Header = () => {
+  const { user, logOut } = useContext(AuthContext);
+
+  const handleLogOut = () => {
+    logOut()
+      .then(() => {
+        // Sign-out successful.
+      })
+      .catch((error) => console.error(error));
+  };
+
   return (
     <div className="navbar bg-base-100 shadow-lg">
       <div className="navbar-start">
@@ -41,6 +53,11 @@ const Header = () => {
                 Register
               </NavLink>
             </li>
+            <li>
+              <NavLink className="" to="/orders">
+                Orders
+              </NavLink>
+            </li>
           </ul>
         </div>
         <a className="btn btn-ghost normal-case text-2xl md:text-3xl font-semibold">
@@ -66,11 +83,27 @@ const Header = () => {
                 Register
               </NavLink>
             </li>
+            <li>
+              <NavLink className="" to="/orders">
+                Orders
+              </NavLink>
+            </li>
           </ul>
         </div>
-        <Link to="/" className="btn">
-          Get started
-        </Link>
+
+        {user ? (
+          <div className="md:flex ml-10 md:ml-4 md:gap-2">
+            <span>{user.email}</span>
+            <button onClick={handleLogOut} className="btn btn-xs">
+              Sign Out
+            </button>
+          </div>
+        ) : (
+          <Link to="/login">
+            {" "}
+            <ArrowRightOnRectangleIcon className="h-6 w-6 text-blue-100-500" />
+          </Link>
+        )}
       </div>
     </div>
   );
